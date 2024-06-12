@@ -1,0 +1,39 @@
+import itertools
+
+def tsp_brute_force(graph, start_node):
+    num_nodes = len(graph)
+    nodes = [i for i in range(num_nodes) if i != start_node]
+    min_path_length = float('inf')
+    min_path = None
+    
+    for perm in itertools.permutations(nodes):
+        current_path_length = 0
+        current_path = [start_node]
+        
+        for i in perm:
+            current_path_length += graph[current_path[-1]][i]
+            current_path.append(i)
+        
+        current_path_length += graph[current_path[-1]][start_node]
+        current_path.append(start_node)
+        
+        if current_path_length < min_path_length:
+            min_path_length = current_path_length
+            min_path = current_path
+    
+    return min_path, min_path_length
+
+# Example usage
+graph = [
+    [0, 10, 15, 20],
+    [10, 0, 35, 25],
+    [15, 35, 0, 30],
+    [20, 25, 30, 0]
+]
+
+start_node = 0
+
+min_path, min_path_length = tsp_brute_force(graph, start_node)
+
+print("Minimum path: ", min_path)
+print("Minimum path length: ", min_path_length)
