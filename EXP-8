@@ -1,0 +1,51 @@
+class Graph:
+    def __init__(self):
+        self.graph = {}
+    
+    def add_edge(self, u, v):
+        if u not in self.graph:
+            self.graph[u] = []
+        self.graph[u].append(v)
+
+    def dfs_util(self, v, visited, path, all_paths):
+        # Mark the current node as visited and store the path
+        visited.add(v)
+        path.append(v)
+
+        # Store the path so far in all_paths
+        all_paths.append(path.copy())
+        
+        # Recur for all the vertices adjacent to this vertex
+        for neighbour in self.graph.get(v, []):
+            if neighbour not in visited:
+                self.dfs_util(neighbour, visited, path, all_paths)
+        
+        # Backtrack: Remove the current node from path
+        path.pop()
+
+    def dfs(self, v):
+        # Mark all the vertices as not visited
+        visited = set()
+        path = []
+        all_paths = []
+
+        # Call the recursive helper function to print DFS traversal
+        self.dfs_util(v, visited, path, all_paths)
+        
+        return all_paths
+
+
+# Create a graph
+g = Graph()
+g.add_edge(0, 1)
+g.add_edge(0, 2)
+g.add_edge(1, 2)
+g.add_edge(2, 0)
+g.add_edge(2, 3)
+g.add_edge(3, 3)
+
+# Get the DFS paths starting from vertex 2
+print("Depth First Search paths starting from vertex 2:")
+paths = g.dfs(2)
+for path in paths:
+    print(" -> ".join(map(str, path)))
