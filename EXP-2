@@ -1,0 +1,33 @@
+def is_safe(board, row, col, N):
+    for i in range(col):
+        if board[row][i] == 1:
+            return False
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+    for i, j in zip(range(row, N, 1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+    return True
+
+def solve_queen(board, col, N):
+    if col >= N:
+        return True
+    for i in range(N):
+        if is_safe(board, i, col, N):
+            board[i][col] = 1
+            if solve_queen(board, col + 1, N) == True:
+                return True
+            board[i][col] = 0
+    return False
+
+def solve_8_queens(N):
+    board = [[0 for _ in range(N)] for _ in range(N)]
+    if solve_queen(board, 0, N) == False:
+        return False
+    return board
+
+N = 8
+solution = solve_8_queens(N)
+for i in range(N):
+    print(solution[i])
