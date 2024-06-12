@@ -1,0 +1,50 @@
+# Define the map of regions and their neighbors
+regions = {
+    'WA': ['NT', 'SA'],
+    'NT': ['WA', 'SA', 'Q', 'NSW'],
+    'SA': ['WA', 'NT', 'Q', 'NSW', 'V'],
+    'Q': ['NT', 'SA', 'NSW'],
+    'NSW': ['Q', 'SA', 'V'],
+    'V': ['SA', 'NSW'],
+    'T': []
+}
+
+# Define the colors
+colors = ['Red', 'Green', 'Blue']
+
+# Function to check if the current color assignment is safe
+def is_safe(region, color, color_map):
+    for neighbor in regions[region]:
+        if color_map.get(neighbor) == color:
+            return False
+    return True
+
+# Function to solve the map coloring problem using backtracking
+def map_coloring(region_index, color_map):
+    if region_index == len(regions):
+        return True
+    
+    region = list(regions.keys())[region_index]
+    
+    for color in colors:
+        if is_safe(region, color, color_map):
+            color_map[region] = color
+            if map_coloring(region_index + 1, color_map):
+                return True
+            color_map[region] = None
+    
+    return False
+
+# Main function to start the map coloring process
+def main():
+    color_map = {region: None for region in regions}
+    
+    if map_coloring(0, color_map):
+        for region in regions:
+            print(f"{region}: {color_map[region]}")
+    else:
+        print("No solution exists")
+
+# Run the main function
+if __name__ == "__main__":
+    main()
